@@ -64,8 +64,8 @@ ssh -i ~/.ssh/id_ed25519 your_username@cluster.example.com "qstat -u your_userna
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/Shibu778/cluster_pulse.git /path/to/cluster_pulse
-cd /path/to/cluster_pulse
+git clone https://github.com/Shibu778/cluster_pulse.git
+cd cluster_pulse/cluster_pulse
 ```
 
 ### 2. Create and activate a Python virtual environment
@@ -73,6 +73,11 @@ cd /path/to/cluster_pulse
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
+```
+
+Check the folder path that will be used later in place of `/path/to/cluster_pulse/`.
+```bash
+pwd
 ```
 
 ### 3. Install dependencies
@@ -108,7 +113,7 @@ notifications:
   ntfy:
     topic: "your_unique_topic_name"  # Your ntfy topic for status notifications
     priority: "default"              # min, low, default, high, max
-    control_topic: "your_control_topic_name"  # Optional command topic
+    control_topic: "your_control_topic_name"  # Optional command topic. For simplicity keep it same as topic.
     control_command: "check"          # Single command accepted by phone
     control_poll_interval_seconds: 15  # How often the app polls the control topic
 
