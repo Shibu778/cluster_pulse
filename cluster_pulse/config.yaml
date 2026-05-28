@@ -1,0 +1,33 @@
+global:
+  check_interval_seconds: 86400        # Periodic polling interval in seconds
+  log_level: "INFO"                  # INFO, DEBUG, WARN, ERROR
+
+notifications:
+  default_method: "ntfy"             # stdout, ntfy, email
+
+  ntfy:
+    topic: "your_unique_topic_name"  # Unique ntfy topic for status alerts
+    priority: "default"              # min, low, default, high, max
+    control_topic: "your_control_topic_name"  # Optional: topic for phone commands
+    control_command: "check"          # Single command accepted from the phone
+    control_poll_interval_seconds: 15  # How often the app polls the control topic
+
+  email:
+    smtp_server: "smtp.example.com"
+    port: 587
+    sender: "your_email@example.com"
+    password: "YOUR_EMAIL_PASSWORD_OR_TOKEN"
+    receiver: "destination_email@example.com"
+
+  telegram:
+    bot_token: "YOUR_TELEGRAM_BOT_TOKEN"
+    chat_id: "YOUR_TELEGRAM_CHAT_ID"
+
+  slack:
+    webhook_url: "YOUR_SLACK_WEBHOOK_URL"
+
+clusters:
+  - name: "Remote Cluster A"
+    ip: "IP_ADDRESS"
+    username: "username"
+    ssh_key_path: "~/.ssh/id_ed25519"
