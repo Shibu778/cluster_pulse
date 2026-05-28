@@ -1,3 +1,4 @@
+```
 cluster_pulse/
 │
 ├── config.yaml               # Your private configuration settings
@@ -17,3 +18,4 @@ cluster_pulse/
         ├── __init__.py
         ├── email_provider.py # Handles SMTP mailing
         └── ntfy_provider.py  # Handles push notifications (optional/extra)
+```
