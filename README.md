@@ -1,28 +1,12 @@
-Here is the complete, raw content for your `README.md` file. You can copy and paste this directly into your file:
-
-```markdown
 # ClusterPulse 🚀
 
-ClusterPulse is a lightweight Linux utility that periodically polls PBS job status from one or more clusters over SSH, and delivers the results through a configurable notification pipeline.
-
-It is designed to keep sensitive connection data out of the codebase by loading a per-user configuration file from `~/.cluster_pulse.yaml`.
-
----
-
-## What ClusterPulse Provides
-
-- periodic cluster status polling using `qstat`
-- SSH-based cluster communication with private key authentication
-- notification delivery via:
-  - `stdout`
-  - `ntfy`
-  - `email`
-- optional phone-triggered control commands
-- safe per-user runtime configuration
+Lightweight PBS cluster status monitor with SSH polling and `ntfy` mobile push notifications. Keeps credentials in `~/.cluster_pulse.yaml` outside the repository.
 
 ---
 
 ## Repository Layout
+
+See [`project_struct.md`](../project_struct.md) for detailed file descriptions.
 
 ```text
 cluster_pulse/
@@ -55,13 +39,11 @@ sudo apt install python3 python3-venv -y
 
 ### SSH access
 
-ClusterPulse uses SSH keys for passwordless access. Confirm your cluster accepts your key:
+Confirm your SSH key works:
 
 ```bash
 ssh -i ~/.ssh/id_ed25519 your_username@cluster.example.com "qstat -u your_username"
 ```
-
-If this succeeds without a password prompt, your SSH setup is ready.
 
 ---
 
@@ -90,22 +72,18 @@ pip install -r requirements.txt
 
 ### 4. Configure ClusterPulse
 
-ClusterPulse loads configuration from `~/.cluster_pulse.yaml` first. If that file is missing, it falls back to the repository template `config.yaml`.
-
-Create your personal config file:
+Copy the template and customize:
 
 ```bash
 cp config.yaml ~/.cluster_pulse.yaml
 chmod 600 ~/.cluster_pulse.yaml
 ```
 
-Then edit `~/.cluster_pulse.yaml` and replace placeholder values with your own settings.
+Edit `~/.cluster_pulse.yaml` with your cluster and notification settings.
 
 ---
 
 ## Configuration
-
-Use the following template and replace placeholders with your actual cluster and notification settings.
 
 ```yaml
 global:
@@ -166,34 +144,15 @@ The running daemon does not automatically reload configuration. Similarly, if yo
 
 ### Install and use the ntfy mobile app
 
-1. Install the `ntfy` app on your phone:
-   - Android: install from Google Play Store or F-Droid
-   - iOS: install from the App Store
-
-2. Open the app and subscribe to your configured topic:
-   - Topic name: the value of `notifications.ntfy.topic`
-   - Example: `your_unique_topic_name`
-
-3. To receive alerts, make sure notifications are enabled for the app.
-
-4. To send a control command from the phone:
-   - Use the same `control_topic` if configured, otherwise use the main `topic`
-   - Publish the exact text `check`
-   - In the app, use the message composition field and send `check`
-
-5. Confirm the command was accepted by checking for the acknowledgement notification.
-
-6. If using a shared or public topic, choose a unique topic name to avoid collisions.
+1. Install `ntfy` app (Android: Google Play / F-Droid, iOS: App Store)
+2. Subscribe to your `notifications.ntfy.topic` in the app
+3. To send a control command: publish `check` to the topic (or `control_topic` if separate)
+4. Responses appear as notifications in the app
 
 ### Phone-triggered control commands
 
-If `control_topic` is configured, ClusterPulse polls that topic for a single command.
-
-- Command text accepted: `check`
-- Publish `check` to the control topic from your phone to trigger an immediate refresh
-- The application sends an acknowledgement message back to the same topic
-
-If `control_topic` is not provided, the main `topic` is used for command polling.
+- Send `check` to `control_topic` (or main `topic` if not configured) to trigger an immediate refresh
+- The daemon responds with status results
 
 ---
 
@@ -201,23 +160,13 @@ If `control_topic` is not provided, the main `topic` is used for command polling
 
 ### Manual run
 
-Start it in the current terminal:
-
 ```bash
 python3 run.py
 ```
 
-If you want phone-triggered refresh, make sure the process is running before publishing `check`.
-
 ### Run in the background with systemd
 
-Create the user service directory:
-
-```bash
-mkdir -p ~/.config/systemd/user/
-```
-
-Create `~/.config/systemd/user/cluster_pulse.service` with:
+Create the service file at `~/.config/systemd/user/cluster_pulse.service`:
 
 ```ini
 [Unit]
@@ -285,6 +234,8 @@ chmod 600 ~/.cluster_pulse.yaml
 - Use a unique ntfy topic name to prevent other people from accidentally sending commands or receiving your notifications.
 - Do not expose `control_topic` publicly unless you understand that it is effectively a remote trigger for the app.
 
-```
+---
 
-```
+## Acknowledgements
+
+This package was developed with the assistance of GitHub Copilot.
