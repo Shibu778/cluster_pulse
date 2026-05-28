@@ -64,7 +64,7 @@ ssh -i ~/.ssh/id_ed25519 your_username@cluster.example.com "qstat -u your_userna
 ### 1. Clone the repository
 
 ```bash
-git clone <repo-url> /path/to/cluster_pulse
+git clone https://github.com/Shibu778/cluster_pulse.git /path/to/cluster_pulse
 cd /path/to/cluster_pulse
 ```
 
