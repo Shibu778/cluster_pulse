@@ -39,7 +39,19 @@ sudo apt install python3 python3-venv -y
 
 ### SSH access
 
-Confirm your SSH key works:
+ClusterPulse requires passwordless SSH login to your remote cluster. If you do not already have an SSH key pair, create one locally:
+
+```bash
+ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519 -C "cluster_pulse"
+```
+
+Copy the public key to your cluster account:
+
+```bash
+ssh-copy-id -i ~/.ssh/id_ed25519.pub your_username@cluster.example.com
+```
+
+Then confirm the connection works without a password prompt:
 
 ```bash
 ssh -i ~/.ssh/id_ed25519 your_username@cluster.example.com "qstat -u your_username"
@@ -111,12 +123,12 @@ clusters:
   - name: "ClusterA"
     ip: "IP Address"
     username: "your_username"
-    ssh_key_path: "~/.ssh/id_rsa"
+    ssh_key_path: "~/.ssh/id_ed25519"
 
   - name: "ClusterB"
     ip: "IP Address"
     username: "your_username"
-    ssh_key_path: "~/.ssh/id_rsa"
+    ssh_key_path: "~/.ssh/id_ed25519"
 ```
 
 ### Notes on sensitive data
@@ -139,8 +151,10 @@ The running daemon does not automatically reload configuration. Similarly, if yo
 ### Notification modes
 
 - `stdout` — print status to console only
-- `ntfy` — push to `ntfy.sh` using `topic`
-- `email` — send email through SMTP
+- `ntfy` — easiest to use and currently the recommended mobile notification method
+- `email` — available in config but not tested yet
+
+Future interface support may include full email, Telegram, Slack, or other channels.
 
 ### Install and use the ntfy mobile app
 
@@ -213,8 +227,8 @@ journalctl --user -u cluster_pulse -f
 ### SSH key path errors
 
 - Confirm the path in `ssh_key_path` exists locally.
-- Use `~/.ssh/id_rsa` or the correct path to your private key.
-- Test manually with `ssh -i ~/.ssh/id_rsa user@cluster qstat -u user`.
+- Use `~/.ssh/id_ed25519` or the correct path to your private key.
+- Test manually with `ssh -i ~/.ssh/id_ed25519 user@cluster qstat -u user`.
 
 ### Configuration load order
 
