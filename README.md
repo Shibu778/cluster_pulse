@@ -6,7 +6,7 @@ Lightweight PBS cluster status monitor with SSH polling and `ntfy` mobile push n
 
 ## Repository Layout
 
-See [`project_struct.md`](../project_struct.md) for detailed file descriptions.
+See [`project_struct.md`](project_struct.md) for detailed file descriptions.
 
 ```text
 cluster_pulse/
